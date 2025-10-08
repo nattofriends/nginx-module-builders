@@ -1,0 +1,2 @@
+objs/ngx_http_zstd_filter_module.so usr/lib/nginx/modules
+objs/ngx_http_zstd_static_module.so usr/lib/nginx/modules
