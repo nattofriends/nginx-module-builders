@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update && apt-get --no-install-recommends --no-install-suggests -y install \
     git wget ca-certificates curl openssl gnupg2 apt-transport-https \
-    unzip make libpcre3-dev zlib1g-dev build-essential devscripts \
+    unzip make libpcre2-dev zlib1g-dev build-essential devscripts \
     debhelper quilt lsb-release libssl-dev lintian uuid-dev \
     cmake
 
@@ -19,7 +19,7 @@ ARG MODULE_VERSION
 ARG BROTLI_VERSION
 
 WORKDIR /work
-RUN git clone https://github.com/google/ngx_brotli && cd ngx_brotli && git submodule update --init --recursive
+RUN git clone --branch ${MODULE_VERSION} --recurse-submodules --shallow-submodules https://github.com/google/ngx_brotli
 RUN git -C ngx_brotli describe --tags HEAD | tr -d v | tee /tmp/module-version
 
 WORKDIR /work/ngx_brotli/deps/brotli

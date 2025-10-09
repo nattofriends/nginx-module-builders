@@ -1,8 +1,9 @@
 SUBDIRS := libnginx-mod-http-brotli-builder libnginx-mod-http-vips-webp-builder libnginx-mod-http-vts-builder libnginx-mod-http-zstd-builder
 
-.PHONY: all
-all: $(SUBDIRS)
+.PHONY: build
+build:
+	for dir in $(SUBDIRS); do $(MAKE) -C $${dir} build; done
 
-.PHONY: $(SUBDIRS)
-$(SUBDIRS):
-	$(MAKE) -C $@ build
+.PHONY: clean
+clean:
+	for dir in $(SUBDIRS); do $(MAKE) -C $${dir} clean; done
