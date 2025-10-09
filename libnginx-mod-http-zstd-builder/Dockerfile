@@ -15,10 +15,11 @@ RUN apt-get update && apt-get --no-install-recommends --no-install-suggests -y i
 ARG NGINX_VERSION
 ARG NGINX_DEB_RELEASE=1
 ARG MODULE_VERSION
+ARG ZSTD_VERSION
 
 # Build zstd
 WORKDIR /work
-RUN git clone https://github.com/facebook/zstd
+RUN git clone --branch ${ZSTD_VERSION} https://github.com/facebook/zstd
 RUN git -C zstd describe --tags HEAD | tee /tmp/zstd-version
 WORKDIR /work/zstd/lib
 ENV CFLAGS=-march=x86-64-v2

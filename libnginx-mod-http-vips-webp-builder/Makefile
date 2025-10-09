@@ -7,7 +7,7 @@ RELEASE ?= $(shell . /etc/os-release; echo $$VERSION_CODENAME)
 BUILD_IMAGE ?= libnginx-mod-http-vips-webp-builder
 
 dist:
-	mkdir -p dist
+	mkdir -p dist ||:
 
 build: dist
 	BUILDKIT_PROGRESS=plain docker build --network=host \
@@ -23,5 +23,5 @@ build: dist
 	docker rm $$(docker ps -l -q)
 
 clean:
-	rm -rf dist/
-	docker rmi $(BUILD_IMAGE)
+	rm -rf dist/ ||:
+	docker rmi $(BUILD_IMAGE) ||:
