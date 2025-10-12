@@ -22,12 +22,12 @@ WORKDIR /work
 RUN git clone --depth=1 --branch ${ZSTD_VERSION} https://github.com/facebook/zstd
 RUN git -C zstd describe --tags HEAD | tee /tmp/zstd-version
 WORKDIR /work/zstd/lib
-ENV CFLAGS=-march=x86-64-v2
+ENV CFLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
 RUN make -j4 lib-mt
 
 # Build the module
 WORKDIR /work
-RUN git clone --depth=1 --branch ${MODULE_VERSION} https://github.com/HanadaLee/ngx_http_zstd_module ngx_http_zstd_module
+RUN git clone --branch ${MODULE_VERSION} https://github.com/HanadaLee/ngx_http_zstd_module ngx_http_zstd_module
 RUN git -C ngx_http_zstd_module describe --tags HEAD | tee /tmp/module-version
 
 RUN wget -qO - https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xzf -
