@@ -10,6 +10,7 @@ dist:
 	mkdir -p dist ||:
 
 build: dist
+	cat src && rsync -avr $$(cat src)./ ngx_http_vhost_traffic_status_module/ ||:
 	BUILDKIT_PROGRESS=plain docker build --network=host \
 		-t $(BUILD_IMAGE) \
 		--build-arg DISTRIB=$(DISTRIB) \
@@ -23,5 +24,5 @@ build: dist
 	docker rm $$(docker ps -l -q)
 
 clean:
-	rm -rf dist/ ||:
+	rm -rf dist ngx_http_vhost_traffic_status_module ||:
 	docker rmi $(BUILD_IMAGE) ||:

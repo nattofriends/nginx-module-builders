@@ -11,6 +11,7 @@ dist:
 	mkdir -p dist ||:
 
 build: dist
+	cat src && rsync -avr $$(cat src)./ ngx_brotli/ ||:
 	BUILDKIT_PROGRESS=plain docker build --network=host \
 		-t $(BUILD_IMAGE) \
 		--build-arg DISTRIB=$(DISTRIB) \
@@ -25,5 +26,5 @@ build: dist
 	docker rm $$(docker ps -l -q)
 
 clean:
-	rm -rf dist/ ||:
+	rm -rf dist ngx_brotli ||:
 	docker rmi $(BUILD_IMAGE) ||:
