@@ -20,8 +20,8 @@ ARG MODULE_VERSION
 WORKDIR /work
 RUN wget -qO - https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xzf -
 
-COPY ngx_http_vips_webp_module* /work/ngx_http_vips_webp_module
-RUN stat ngx_http_vips_webp_module || git clone --branch ${MODULE_VERSION} https://github.com/nattofriends/nginx-module-vips-webp /work/ngx_http_vips_webp_module
+COPY placeholder ./ngx_http_vips_webp_module*/ /work/ngx_http_vips_webp_module/
+RUN rm ngx_http_vips_webp_module/placeholder; stat ngx_http_vips_webp_module/.git || git clone --branch ${MODULE_VERSION} https://github.com/nattofriends/nginx-module-vips-webp /work/ngx_http_vips_webp_module
 RUN git -C ngx_http_vips_webp_module describe --tags HEAD | tr -d v | tee /tmp/module-version
 
 COPY debian /work/nginx-${NGINX_VERSION}/debian

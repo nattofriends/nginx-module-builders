@@ -28,8 +28,8 @@ RUN make -j4 lib-mt
 # Build the module
 WORKDIR /work
 
-COPY ngx_http_zstd_module* /work/ngx_http_zstd_module
-RUN stat ngx_http_zstd_module || git clone --branch ${MODULE_VERSION} https://github.com/HanadaLee/ngx_http_zstd_module ngx_http_zstd_module
+COPY placeholder ./ngx_http_zstd_module*/ /work/ngx_http_zstd_module/
+RUN rm ngx_http_zstd_module/placeholder; stat ngx_http_zstd_module/.git || git clone --branch ${MODULE_VERSION} https://github.com/HanadaLee/ngx_http_zstd_module ngx_http_zstd_module
 
 RUN git -C ngx_http_zstd_module describe --tags HEAD | tee /tmp/module-version
 

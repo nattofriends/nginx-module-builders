@@ -19,8 +19,8 @@ ARG MODULE_VERSION
 # Build the module
 WORKDIR /work
 
-COPY ngx_http_vhost_traffic_status_module* /work/ngx_http_vhost_traffic_status_module
-RUN stat ngx_http_vhost_traffic_status_module || git clone --branch v${MODULE_VERSION} https://github.com/vozlt/nginx-module-vts ngx_http_vhost_traffic_status_module
+COPY placeholder ./ngx_http_vhost_traffic_status_module*/ /work/ngx_http_vhost_traffic_status_module/
+RUN rm ngx_http_vhost_traffic_status_module/placeholder; stat ngx_http_vhost_traffic_status_module/.git || git clone --branch v${MODULE_VERSION} https://github.com/vozlt/nginx-module-vts ngx_http_vhost_traffic_status_module
 RUN git -C ngx_http_vhost_traffic_status_module describe --tags HEAD | tr -d v | tee /tmp/module-version
 
 RUN wget -qO - https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar xzf -
