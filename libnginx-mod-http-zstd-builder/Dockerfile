@@ -39,7 +39,7 @@ WORKDIR /work/nginx-${NGINX_VERSION}
 COPY debian debian
 
 RUN dch --create --controlmaint --package libnginx-mod-http-zstd \
-    -v $(cat /tmp/module-version)+zstd-$(cat /tmp/zstd-version)-nginx-${NGINX_VERSION}-${NGINX_DEB_RELEASE} \
+    -v $(cat /tmp/module-version)+zstd-$(cat /tmp/zstd-version)-nginx-${NGINX_VERSION}-${NGINX_DEB_RELEASE}~${RELEASE} \
     --distribution ${RELEASE} "Release (module: $(cat /tmp/module-version); zstd: $(cat /tmp/zstd-version); for nginx ${NGINX_VERSION}-${NGINX_DEB_RELEASE})"
 
 RUN sed -i "s/{NGINX_VERSION}/${NGINX_VERSION}-${NGINX_DEB_RELEASE}~${RELEASE}/g" debian/control

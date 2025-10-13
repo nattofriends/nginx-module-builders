@@ -29,7 +29,7 @@ COPY debian /work/nginx-${NGINX_VERSION}/debian
 WORKDIR /work/nginx-${NGINX_VERSION}
 
 RUN dch --create --controlmaint --package libnginx-mod-http-vips-webp \
-    -v $(cat /tmp/module-version)-nginx-${NGINX_VERSION}-${NGINX_DEB_RELEASE} \
+    -v $(cat /tmp/module-version)-nginx-${NGINX_VERSION}-${NGINX_DEB_RELEASE}~${RELEASE} \
     --distribution ${RELEASE} "Release (module: $(cat /tmp/module-version); for nginx ${NGINX_VERSION}-${NGINX_DEB_RELEASE})"
 
 RUN sed -i "s/{NGINX_VERSION}/${NGINX_VERSION}-${NGINX_DEB_RELEASE}~${RELEASE}/g" debian/control

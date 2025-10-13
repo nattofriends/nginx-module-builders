@@ -16,8 +16,6 @@ ARG NGINX_VERSION
 ARG NGINX_DEB_RELEASE=1
 ARG MODULE_VERSION
 
-ENV PACKAGE_VERSION=${MODULE_VERSION}+nginx-${NGINX_VERSION}~${RELEASE}
-
 # Build the module
 WORKDIR /work
 
@@ -31,7 +29,7 @@ WORKDIR /work/nginx-${NGINX_VERSION}
 COPY debian debian
 
 RUN dch --create --controlmaint --package libnginx-mod-http-vts \
-    -v $(cat /tmp/module-version)-nginx-${NGINX_VERSION}-${NGINX_DEB_RELEASE} \
+    -v $(cat /tmp/module-version)-nginx-${NGINX_VERSION}-${NGINX_DEB_RELEASE}~${RELEASE} \
     --distribution ${RELEASE} "Release (module: $(cat /tmp/module-version); for nginx ${NGINX_VERSION}-${NGINX_DEB_RELEASE})"
 
 RUN sed -i "s/{NGINX_VERSION}/${NGINX_VERSION}-${NGINX_DEB_RELEASE}~${RELEASE}/g" debian/control
