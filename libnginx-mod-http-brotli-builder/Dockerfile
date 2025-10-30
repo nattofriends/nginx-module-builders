@@ -20,7 +20,7 @@ ARG BROTLI_VERSION
 
 WORKDIR /work
 COPY placeholder ./ngx_brotli*/ /work/ngx_brotli/
-RUN rm ngx_brotli/placeholder stat ngx_brotli/.git || git clone --branch ${MODULE_VERSION} --recurse-submodules --shallow-submodules https://github.com/google/ngx_brotli
+RUN rm ngx_brotli/placeholder; stat ngx_brotli/.git || git clone --branch ${MODULE_VERSION} --recurse-submodules --shallow-submodules https://github.com/google/ngx_brotli
 RUN git -C ngx_brotli describe --tags HEAD | tr -d v | tee /tmp/module-version
 
 WORKDIR /work/ngx_brotli/deps/brotli
