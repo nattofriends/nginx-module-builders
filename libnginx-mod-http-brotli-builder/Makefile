@@ -1,6 +1,6 @@
 NGINX_VERSION ?= $(shell curl -s https://nginx.org/en/CHANGES | grep -m1 -Po "(\d+\.)+\d+")
 MODULE_VERSION ?= master
-BROTLI_VERSION ?= v1.0.9
+BROTLI_VERSION ?= v1.2.0
 
 DISTRIB ?= $(shell . /etc/os-release; echo $$ID)
 RELEASE ?= $(shell . /etc/os-release; echo $$VERSION_CODENAME)
