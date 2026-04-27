@@ -1,6 +1,6 @@
 NGINX_VERSION ?= $(shell curl -s https://nginx.org/en/CHANGES | grep -m1 -Po "(\d+\.)+\d+")
 MODULE_VERSION ?= master
-BROTLI_VERSION ?= v1.0.9
+BROTLI_VERSION ?= v1.2.0
 
 DISTRIB ?= $(shell . /etc/os-release; echo $$ID)
 RELEASE ?= $(shell . /etc/os-release; echo $$VERSION_CODENAME)
@@ -11,7 +11,7 @@ dist:
 	mkdir -p dist ||:
 
 build: dist
-	cat src && rsync -avr $$(cat src)./ ngx_brotli/ ||:
+	cat src && rsync -avr $$(cat src)/ ngx_brotli/ ||:
 	BUILDKIT_PROGRESS=plain docker build --network=host \
 		-t $(BUILD_IMAGE) \
 		--build-arg DISTRIB=$(DISTRIB) \

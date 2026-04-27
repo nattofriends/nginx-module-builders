@@ -11,7 +11,7 @@ dist:
 	mkdir -p dist ||:
 
 build: dist
-	cat src && rsync -avr $$(cat src)./ ngx_http_zstd_module/ ||:
+	cat src && rsync -avr $$(cat src)/ ngx_http_zstd_module/ ||:
 	BUILDKIT_PROGRESS=plain docker build --network=host \
 		-t $(BUILD_IMAGE) \
 		--build-arg DISTRIB=$(DISTRIB) \
