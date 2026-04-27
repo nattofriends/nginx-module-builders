@@ -17,13 +17,33 @@ ARG NGINX_DEB_RELEASE=1
 ARG MODULE_VERSION
 ARG ZSTD_VERSION
 
-# Build zstd
+# Build zstd with PGO
 WORKDIR /work
 RUN git clone --depth=1 --branch ${ZSTD_VERSION} https://github.com/facebook/zstd
 RUN git -C zstd describe --tags HEAD | tee /tmp/zstd-version
-WORKDIR /work/zstd/lib
-ENV CFLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
-RUN make -j4 lib-mt
+WORKDIR /work/zstd
+RUN set -ex; \
+    BASE_CFLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections"; \
+    BASE_LDFLAGS="-Wl,--gc-sections"; \
+    PGO_HASH="pgo"; \
+    # 1. Use upstream's official PGO target for high-quality training \
+    make -C programs -j$(nproc) zstd-pgo \
+        HASH_DIR=${PGO_HASH} CC=gcc \
+        MOREFLAGS="${BASE_CFLAGS} ${BASE_LDFLAGS}"; \
+    # 2. Sync profiles to the library directory's static obj path \
+    # This allows lib/Makefile to find the training data from the CLI build. \
+    mkdir -p lib/obj/${PGO_HASH}/static; \
+    cp programs/obj/${PGO_HASH}/*.gcda lib/obj/${PGO_HASH}/static/ || true; \
+    # Also sync to the dynamic path for the shared library build \
+    mkdir -p lib/obj/${PGO_HASH}/dynamic; \
+    cp programs/obj/${PGO_HASH}/*.gcda lib/obj/${PGO_HASH}/dynamic/ || true; \
+    # 3. Build the library using upstream's object list (keeps us in sync) \
+    # We use the same 'ignore' flags as upstream's zstd-pgo target \
+    PROF_USE_FLAGS="-fprofile-use -fprofile-dir=. -Wno-error=missing-profile -Wno-error=coverage-mismatch"; \
+    make -C lib -j$(nproc) lib-mt \
+        HASH_DIR=${PGO_HASH} \
+        MOREFLAGS="${BASE_CFLAGS} ${BASE_LDFLAGS} ${PROF_USE_FLAGS}"; \
+    find . -name "*.gcda" -delete
 
 # Build the module
 WORKDIR /work
