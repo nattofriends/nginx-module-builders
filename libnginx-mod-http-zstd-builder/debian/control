@@ -8,6 +8,7 @@ Build-Depends: debhelper (>= 9~),
                lsb-release,
                libssl-dev (>= 0.9.7),
                libpcre2-dev,
+               libzstd-dev,
                zlib1g-dev
 Standards-Version: 3.9.8.0
 Homepage: https://github.com/tokers/zstd-nginx-module

@@ -12,7 +12,9 @@ clean:
 	rm -f $(CURDIR)/objs
 
 override_dh_auto_configure:
-	./configure --add-dynamic-module=../ngx_http_zstd_module --with-compat
+	./configure --add-dynamic-module=../ngx_http_zstd_module --with-compat \
+		--with-cc-opt="-DZSTD_STATIC_LINKING_ONLY $(pkg-config --cflags libzstd zlib libpcre2-8)" \
+		--with-ld-opt="$(pkg-config --libs libzstd zlib libpcre2-8)"
 
 override_dh_auto_build:
 	make modules
